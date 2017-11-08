@@ -4,6 +4,7 @@
   "dependencies": {
     "bootstrap": "v3.3.7",
     "jQuery": "3.2.1",
-    "jquery-validation-unobtrusive": "v3.2.6"
+    "jquery-validation-unobtrusive": "v3.2.6",
+    "font-awesome": "Font-Awesome#v4.7.0"
   }
 }
