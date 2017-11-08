@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "ArthwindsConnectionString": "server=(localdb)\\MSSQLLocalDB;Database=Arthwinds;Integrated Security=true;MultipleActiveResultSets=true;"
+  }
+}
