@@ -1,10 +1,18 @@
-﻿using ArthWeight.ViewModels;
+﻿using ArthWeight.Data;
+using ArthWeight.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DutchTreat.Controllers
 {
   public class AppController : Controller
   {
+        private readonly IArthwindsRepository _arthwindsRepository;
+
+        public AppController(IArthwindsRepository arthwindsRepository)
+        {
+            _arthwindsRepository = arthwindsRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -23,7 +31,8 @@ namespace DutchTreat.Controllers
 
         public IActionResult History()
         {
-            return View();
+            var weightEntries = _arthwindsRepository.WeightEntries();
+            return View(weightEntries);
         }
     }
 }

@@ -1,4 +1,10 @@
-﻿@{
+﻿@model IEnumerable<WeightEntry>
+
+@{
     ViewBag.Title = "History";
 }
-<p>More to follow</p>
+
+<p>Count: @Model.Count()</p>
+@foreach (var e in Model)
+{
+}

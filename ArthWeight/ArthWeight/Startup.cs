@@ -23,6 +23,8 @@ namespace ArthWeight
                 cfg.UseSqlServer(_config.GetConnectionString("ArthwindsConnectionString"));
             });
 
+            services.AddScoped<IArthwindsRepository, ArthwindsRepository>();
+
             services.AddMvc();
         }
 
