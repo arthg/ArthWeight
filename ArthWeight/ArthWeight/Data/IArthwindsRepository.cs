@@ -5,7 +5,7 @@ namespace ArthWeight.Data
 {
     public interface IArthwindsRepository
     {
-        IEnumerable<WeightEntry> WeightEntries();
+        IEnumerable<WeightEntry> GetWeightEntries();
         bool SaveAll();
     }
 }

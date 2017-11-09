@@ -18,7 +18,7 @@ namespace ArthWeight.Data
             _logger = logger;
         }
 
-        public IEnumerable<WeightEntry> WeightEntries()
+        public IEnumerable<WeightEntry> GetWeightEntries()
         {
             try
             {

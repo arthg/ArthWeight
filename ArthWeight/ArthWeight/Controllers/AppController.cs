@@ -31,7 +31,7 @@ namespace DutchTreat.Controllers
 
         public IActionResult History()
         {
-            var weightEntries = _arthwindsRepository.WeightEntries();
+            var weightEntries = _arthwindsRepository.GetWeightEntries();
             return View(weightEntries);
         }
     }
