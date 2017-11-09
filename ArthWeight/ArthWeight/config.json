@@ -1,5 +1,11 @@
 {
   "ConnectionStrings": {
     "ArthwindsConnectionString": "server=(localdb)\\MSSQLLocalDB;Database=Arthwinds;Integrated Security=true;MultipleActiveResultSets=true;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
   }
 }
