@@ -2,9 +2,10 @@
 
 namespace ArthWeight.ViewModels
 {
-    public class WeightViewModel
+    public sealed class WeightViewModel
     {
         [Required]
+        [Range(.01, 500)]
         public decimal Weight { get; set; }
     }
 }

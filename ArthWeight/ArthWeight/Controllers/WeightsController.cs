@@ -35,15 +35,28 @@ namespace ArthWeight.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]WeightEntry weightEntry)
+        public IActionResult Post([FromBody]WeightViewModel weightViewModel)
         {
             try
             {
-                _arthwindsRepository.AddEntity(weightEntry);
-                if (_arthwindsRepository.SaveAll())
+                if (ModelState.IsValid)
                 {
-                    return Created($"/api/weights/{weightEntry.Id}", weightEntry);
+                    var weightEntry = new WeightEntry
+                    {
+                        Weight = weightViewModel.Weight,
+                        CreatedDate = DateTime.UtcNow
+                    };
+                    _arthwindsRepository.AddEntity(weightEntry);
+                    if (_arthwindsRepository.SaveAll())
+                    {
+                        return Created($"/api/weights/{weightEntry.Id}", weightEntry);
+                    }
                 }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+
             }
             catch (Exception ex)
             {
