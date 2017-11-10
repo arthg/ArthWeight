@@ -18,6 +18,11 @@ namespace ArthWeight.Data
             _logger = logger;
         }
 
+        public void AddEntity(object model)
+        {
+            _arthwindsContext.Add(model);
+        }
+
         public IEnumerable<WeightEntry> GetWeightEntries()
         {
             try

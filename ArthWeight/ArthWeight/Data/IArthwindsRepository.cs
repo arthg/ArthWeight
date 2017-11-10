@@ -7,5 +7,6 @@ namespace ArthWeight.Data
     {
         IEnumerable<WeightEntry> GetWeightEntries();
         bool SaveAll();
+        void AddEntity(object model);
     }
 }
