@@ -1,6 +1,7 @@
 ﻿using ArthWeight.Data;
 using ArthWeight.Data.Entities;
 using ArthWeight.ViewModels;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,12 +13,14 @@ namespace ArthWeight.Controllers
     {
         private readonly IArthwindsRepository _arthwindsRepository;
         private readonly ILogger<WeightsController> _logger;
+        private readonly IMapper _mapper;
 
         public WeightsController(IArthwindsRepository arthwindsRepository,
-            ILogger<WeightsController> logger)
+            ILogger<WeightsController> logger, IMapper mapper)
         {
             _arthwindsRepository = arthwindsRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,12 +43,8 @@ namespace ArthWeight.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {
-                    var weightEntry = new WeightEntry
-                    {
-                        Weight = weightViewModel.Weight,
-                        CreatedDate = DateTime.UtcNow
-                    };
+                {                   
+                    var weightEntry = _mapper.Map<WeightViewModel, WeightEntry>(weightViewModel);
                     _arthwindsRepository.AddEntity(weightEntry);
                     if (_arthwindsRepository.SaveAll())
                     {

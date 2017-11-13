@@ -1,4 +1,5 @@
 ﻿using ArthWeight.Data;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ namespace ArthWeight
             {
                 cfg.UseSqlServer(_config.GetConnectionString("ArthwindsConnectionString"));
             });
+
+            services.AddAutoMapper();
 
             services.AddScoped<IArthwindsRepository, ArthwindsRepository>();
 
