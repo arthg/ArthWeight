@@ -1,5 +1,6 @@
 ﻿using ArthWeight.Data;
 using ArthWeight.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DutchTreat.Controllers
@@ -13,6 +14,7 @@ namespace DutchTreat.Controllers
             _arthwindsRepository = arthwindsRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();

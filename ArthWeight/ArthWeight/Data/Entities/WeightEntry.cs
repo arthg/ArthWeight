@@ -7,5 +7,6 @@ namespace ArthWeight.Data.Entities
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public decimal Weight { get; set; }
+        public User User { get; set; }             
     }
 }

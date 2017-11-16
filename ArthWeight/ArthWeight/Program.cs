@@ -4,6 +4,24 @@ using Microsoft.Extensions.Configuration;
 
 namespace ArthWeight
 {
+    /*
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ArthwindsContext>
+    {
+        public ArthwindsContext CreateDbContext(string[] args)
+        {
+            var builder = new DbContextOptionsBuilder<ArthwindsContext>();
+            IConfigurationRoot configuration =
+            new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("config.json", false)
+            .Build();
+            var connectionString = configuration.GetConnectionString("ArthwindsConnectionString");
+            builder.UseSqlServer(connectionString);
+            return new ArthwindsContext(builder.Options);
+        }
+    }
+    */
+
     public class Program
     {
         public static void Main(string[] args)

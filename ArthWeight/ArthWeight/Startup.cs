@@ -1,7 +1,9 @@
 ﻿using ArthWeight.Data;
+using ArthWeight.Data.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,12 +21,20 @@ namespace ArthWeight
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<User, IdentityRole>(cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true;
+            })
+                    .AddEntityFrameworkStores<ArthwindsContext>();
+
             services.AddDbContext<ArthwindsContext>(cfg =>
             {
                 cfg.UseSqlServer(_config.GetConnectionString("ArthwindsConnectionString"));
             });
 
             services.AddAutoMapper();
+
+            services.AddTransient<ArthwindsSeeder>();
 
             services.AddScoped<IArthwindsRepository, ArthwindsRepository>();
 
@@ -45,6 +55,9 @@ namespace ArthWeight
 
             app.UseStaticFiles();
 
+            // must be BEFORE app.UseMvc
+            app.UseAuthentication();
+
             app.UseMvc(cfg =>
             {
                 cfg.MapRoute("Default",
@@ -52,6 +65,15 @@ namespace ArthWeight
                   new { controller = "App", Action = "Index" });
             });
 
+            if (env.IsDevelopment())
+            {
+                // Seed the database
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService<ArthwindsSeeder>();
+                    seeder.Seed().Wait();
+                }
+            }
         }
     }
 }

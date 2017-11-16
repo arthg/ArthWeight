@@ -11,9 +11,10 @@ using System;
 namespace ArthWeight.Migrations
 {
     [DbContext(typeof(ArthwindsContext))]
-    partial class ArthwindsContextModelSnapshot : ModelSnapshot
+    [Migration("20171114001558_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
