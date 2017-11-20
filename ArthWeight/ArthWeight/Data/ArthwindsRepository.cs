@@ -1,4 +1,5 @@
 ﻿using ArthWeight.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,15 +28,34 @@ namespace ArthWeight.Data
         {
             try
             {
-                return _arthwindsContext.WeightEntries.OrderBy(e => e.CreatedDate);
+                return _arthwindsContext.WeightEntries
+                    .Include(e => e.User)
+                    .OrderBy(e => e.CreatedDate);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to get all products: {ex}");
+                _logger.LogError($"Failed to get all weights: {ex}");
                 return null;
             }
         }
 
+        public IEnumerable<WeightEntry> GetWeightEntriesByUser(string username)
+        {
+            //TODO: reduce repeated code with GetWeightEntries
+            //TODO: limit the information returned on the user - don't need all of it.  any of it??!!
+            try
+            {
+                return _arthwindsContext.WeightEntries
+                    .Where(e => e.User.UserName == username)
+                    .Include(e => e.User)
+                    .OrderBy(e => e.CreatedDate);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get weight entries: {ex}");
+                return null;
+            }
+        }
 
         public bool SaveAll()
         {

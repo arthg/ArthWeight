@@ -4,9 +4,11 @@ using ArthWeight.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace ArthWeight.Controllers
 {
@@ -17,13 +19,17 @@ namespace ArthWeight.Controllers
         private readonly IArthwindsRepository _arthwindsRepository;
         private readonly ILogger<WeightsController> _logger;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+
 
         public WeightsController(IArthwindsRepository arthwindsRepository,
-            ILogger<WeightsController> logger, IMapper mapper)
+            ILogger<WeightsController> logger, IMapper mapper,
+            UserManager<User> userManager)
         {
             _arthwindsRepository = arthwindsRepository;
             _logger = logger;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -32,7 +38,9 @@ namespace ArthWeight.Controllers
             try
             {
                 var username = User.Identity.Name;
-                return Ok(_arthwindsRepository.GetWeightEntries());
+                // TODO: should be mapper to view model
+                var weightEntries = _arthwindsRepository.GetWeightEntries();
+                return Ok(weightEntries);
             }
             catch (Exception ex)
             {
@@ -42,13 +50,17 @@ namespace ArthWeight.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]WeightViewModel weightViewModel)
+        public async Task<IActionResult> Post([FromBody]WeightViewModel weightViewModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {                   
                     var weightEntry = _mapper.Map<WeightViewModel, WeightEntry>(weightViewModel);
+
+                    var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    weightEntry.User = currentUser;
+
                     _arthwindsRepository.AddEntity(weightEntry);
                     if (_arthwindsRepository.SaveAll())
                     {
