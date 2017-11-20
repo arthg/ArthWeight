@@ -4,19 +4,23 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace ArthWeight
 {
     public class Startup
     {
         private readonly IConfiguration _config;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public Startup(IConfiguration config)
+        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
         {
             _config = config;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -38,7 +42,14 @@ namespace ArthWeight
 
             services.AddScoped<IArthwindsRepository, ArthwindsRepository>();
 
-            services.AddMvc();
+            services.AddMvc(opt =>
+            {
+                if (_hostingEnvironment.IsProduction())
+                {
+                    opt.Filters.Add(new RequireHttpsAttribute());
+                }
+            })
+            .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
