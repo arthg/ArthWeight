@@ -2,6 +2,8 @@
 using ArthWeight.Data.Entities;
 using ArthWeight.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,6 +11,7 @@ using System;
 namespace ArthWeight.Controllers
 {
     [Route("api/[Controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class WeightsController : Controller
     {
         private readonly IArthwindsRepository _arthwindsRepository;
@@ -28,6 +31,7 @@ namespace ArthWeight.Controllers
         {
             try
             {
+                var username = User.Identity.Name;
                 return Ok(_arthwindsRepository.GetWeightEntries());
             }
             catch (Exception ex)

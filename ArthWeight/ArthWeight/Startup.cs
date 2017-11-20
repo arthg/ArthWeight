@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace ArthWeight
 {
@@ -30,6 +32,19 @@ namespace ArthWeight
                 cfg.User.RequireUniqueEmail = true;
             })
                     .AddEntityFrameworkStores<ArthwindsContext>();
+
+            services.AddAuthentication()
+                    .AddCookie()
+                    .AddJwtBearer(cfg =>
+                    {
+                        cfg.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidIssuer = _config["Tokens:Issuer"],
+                            ValidAudience = _config["Tokens:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
+                        };
+
+                    });
 
             services.AddDbContext<ArthwindsContext>(cfg =>
             {
